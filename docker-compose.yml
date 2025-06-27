@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  user-service:
+    build:
+      context: ./user-service
+    container_name: user-service
+    ports:
+      - "5001:5001"
+    depends_on:
+      - mongo
+      - redis
+      - role-service
+    environment:
+      - NODE_ENV=development
+      - JWT_SECRET=mySuperSecret
+      - MONGO_URI=mongodb://mongo:27017/userdb
+      - ROLE_SERVICE_URL=http://role-service:5003/api/v6/roles/assign
+
+  asset-service:
+    build:
+      context: ./asset-service
+    container_name: asset-service
+    ports:
+      - "5002:5002"
+    depends_on:
+      - mongo
+      - redis
+      - role-service
+    environment:
+      - NODE_ENV=development
+      - JWT_SECRET=mySuperSecret
+      - MONGO_URI=mongodb://mongo:27017/assetdb
+      - ROLE_SERVICE_URL=http://role-service:5003/api/v6/roles
+
+  role-service:
+    build:
+      context: ./role-service
+    container_name: role-service
+    ports:
+      - "5003:5003"
+    depends_on:
+      - mongo
+    environment:
+      - NODE_ENV=development
+      - JWT_SECRET=mySuperSecret
+      - MONGO_URI=mongodb://mongo:27017/roledb
+
+volumes:
+  mongo-data:

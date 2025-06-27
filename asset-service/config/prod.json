@@ -1,0 +1,7 @@
+{
+  "PORT": 80,
+  "MONGO_URI": "mongodb://mongo:27017/assetdb",
+  "JWT_SECRET": "prod-super-secret",
+  "REDIS_URL": "redis://redis:6379",
+  "ROLE_SERVICE_URL": "http://role-service:5003/api/v6/roles"
+}

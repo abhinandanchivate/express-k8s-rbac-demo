@@ -1,0 +1,5 @@
+{
+  "PORT": 5003,
+  "MONGO_URI": "mongodb://localhost:27017/roledb-dev",
+  "REDIS_URL": "redis://localhost:6379"
+}
