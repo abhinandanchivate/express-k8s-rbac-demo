@@ -4,19 +4,19 @@ import bcrypt from "bcrypt";
 import config from "config";
 
 export const registerUser = async (req, res) => {
+  let success = false;
   const { name, email, password } = req.body;
   const hashed = await bcrypt.hash(password, 10);
   const user = await User.create({ name, email, password: hashed });
 
   // Retry logic: assign default role via role-service with fallback
   try {
-    const roleServiceUrl =
-      config.get("ROLE_SERVICE_URL") ||
-      "http://role-service:5003/api/v6/roles/assign";
-    let success = false;
+    const roleServiceUrl = config.get("ROLE_SERVICE_URL");
+
+    console.log(roleServiceUrl);
     for (let attempt = 1; attempt <= 3 && !success; attempt++) {
       try {
-        const res = await fetch(roleServiceUrl, {
+        const res = await fetch(roleServiceUrl + "/assign", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId: user._id, role: "viewer" }),
@@ -30,6 +30,11 @@ export const registerUser = async (req, res) => {
     }
   } catch (err) {
     console.error("Failed to assign default role:", err.message);
+  }
+
+  if (success) {
+    console.log("Default role assigned successfully");
+    res.status(201).json({ msg: "User registered and role assigned", user });
   }
 };
 

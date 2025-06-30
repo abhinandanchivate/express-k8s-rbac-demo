@@ -1,5 +1,5 @@
 {
   "PORT": 5003,
-  "MONGO_URI": "mongodb://mongo:27017/roledb",
+  "MONGO_URI": "mongodb://mongo:27017/assetsdb",
   "REDIS_URL": "redis://redis:6379"
 }

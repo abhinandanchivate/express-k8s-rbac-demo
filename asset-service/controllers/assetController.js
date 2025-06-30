@@ -1,6 +1,6 @@
 /* Asset controller logic */
 import Asset from "../model/Asset.js";
-import redisClient from "../../shared/redis/redisClient.js";
+import redisClient from "../utils/redisClient.js";
 import config from "config";
 import axios from "axios";
 

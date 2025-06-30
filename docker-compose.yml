@@ -1,6 +1,29 @@
-version: "3.8"
+version: "3.9"
 
 services:
+  etcd:
+    image: bitnami/etcd:latest
+    container_name: etcd
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
+    ports:
+      - "2379:2379"
+
+  apisix:
+    image: apache/apisix:2.15.0-alpine
+    container_name: apisix
+    depends_on:
+      - etcd
+    volumes:
+      - ./apisix/dashboard_conf.yaml:/usr/local/apisix/conf/dashboard_conf.yaml:ro
+      - ./apisix/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+    ports:
+      - "9080:9080" # HTTP outbound port : external comm : inbound : internal container usage.
+      - "9443:9443" # HTTPS
+      - "9180:9180" # Admin API
+
   mongo:
     image: mongo:6
     container_name: mongo
@@ -42,7 +65,7 @@ services:
       - redis
       - role-service
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=dev
       - JWT_SECRET=mySuperSecret
       - MONGO_URI=mongodb://mongo:27017/assetdb
       - ROLE_SERVICE_URL=http://role-service:5003/api/v6/roles

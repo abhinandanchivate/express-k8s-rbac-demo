@@ -1,4 +1,5 @@
-/* MongoDB connection setup */ import mongoose from "mongoose";
+/* MongoDB connection setup */
+import mongoose from "mongoose";
 import config from "config";
 
 export const connectDB = async () => {
@@ -7,9 +8,9 @@ export const connectDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("MongoDB connected for User Service");
+    console.log("MongoDB connected for Role Service");
   } catch (err) {
-    console.error("User Service DB Connection Error:", err);
+    console.error("Role Service DB Connection Error:", err);
     process.exit(1);
   }
 };

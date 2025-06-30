@@ -1,7 +1,11 @@
 /* Role schema */ import mongoose from "mongoose";
 
 const roleSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", unique: true },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    unique: true,
+  },
   role: {
     type: String,
     enum: ["admin", "editor", "viewer"],

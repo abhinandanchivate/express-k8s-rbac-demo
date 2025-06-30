@@ -1,7 +1,6 @@
 {
-  "PORT": 5002,
-  "MONGO_URI": "mongodb://mongo:27017/roledb",
-  "JWT_SECRET": "supersecurekey",
+  "PORT": 5001,
+  "MONGO_URI": "mongodb://mongo:27017/userdb-dev",
   "REDIS_URL": "redis://redis:6379",
   "ROLE_SERVICE_URL": "http://role-service:5003/api/v6/roles"
 }
